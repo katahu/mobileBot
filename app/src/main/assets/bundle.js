@@ -2612,31 +2612,31 @@ mainMenu.append(containerDrop)
 document.body.append(btnToggle, mainMenu)
 class ThemeController {
   constructor() {
-    this.systemTheme = settings.getFromStorage("systemTheme", false)
+    this.systemTheme = settings.getFromStorage('systemTheme', false)
     this.nowTheme = null
   }
 
   init() {
     if (!this.systemTheme) {
-      this.nowTheme = window.matchMedia("(prefers-color-scheme: dark)").matches ? "dark" : "light"
-      settings.setToStorage("themeMode", true)
-      settings.setToStorage("theme", this.nowTheme)
+      this.nowTheme = window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light'
+      settings.setToStorage('themeMode', true)
+      settings.setToStorage('theme', this.nowTheme)
     } else {
-      this.nowTheme = settings.getFromStorage("theme")
+      this.nowTheme = settings.getFromStorage('theme')
     }
 
     this.setTheme(this.nowTheme)
   }
 
   setTheme(theme) {
-    document.body.classList.remove("theme-light", "theme-dark")
+    document.body.classList.remove('theme-light', 'theme-dark')
     document.body.classList.add(`theme-${theme}`)
-    settings.setToStorage("theme", theme)
+    settings.setToStorage('theme', theme)
     this.nowTheme = theme
   }
 
   toggleTheme() {
-    const newTheme = this.nowTheme === "dark" ? "light" : "dark"
+    const newTheme = this.nowTheme === 'dark' ? 'light' : 'dark'
     this.setTheme(newTheme)
   }
 }
