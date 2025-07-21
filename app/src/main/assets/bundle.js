@@ -2588,11 +2588,6 @@ const menuButtons = new Button([
     text: "Дроп",
     onClick: () => containerDrop.classList.toggle("open"),
   },
-  // {
-  //   icon: "fa-light icons-fight",
-  //   text: "Для яда",
-  //   onClick: () => new Tester().execute(),
-  // },
 ])
 
 const btnToggle = document.createElement("div")
@@ -2617,31 +2612,31 @@ mainMenu.append(containerDrop)
 document.body.append(btnToggle, mainMenu)
 class ThemeController {
   constructor() {
-    this.systemTheme = settings.getFromStorage('systemTheme', false)
+    this.systemTheme = settings.getFromStorage("systemTheme", false)
     this.nowTheme = null
   }
 
   init() {
     if (!this.systemTheme) {
-      this.nowTheme = window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light'
-      settings.setToStorage('themeMode', true)
-      settings.setToStorage('theme', this.nowTheme)
+      this.nowTheme = window.matchMedia("(prefers-color-scheme: dark)").matches ? "dark" : "light"
+      settings.setToStorage("themeMode", true)
+      settings.setToStorage("theme", this.nowTheme)
     } else {
-      this.nowTheme = settings.getFromStorage('theme')
+      this.nowTheme = settings.getFromStorage("theme")
     }
 
     this.setTheme(this.nowTheme)
   }
 
   setTheme(theme) {
-    document.body.classList.remove('theme-light', 'theme-dark')
+    document.body.classList.remove("theme-light", "theme-dark")
     document.body.classList.add(`theme-${theme}`)
-    settings.setToStorage('theme', theme)
+    settings.setToStorage("theme", theme)
     this.nowTheme = theme
   }
 
   toggleTheme() {
-    const newTheme = this.nowTheme === 'dark' ? 'light' : 'dark'
+    const newTheme = this.nowTheme === "dark" ? "light" : "dark"
     this.setTheme(newTheme)
   }
 }
@@ -2835,7 +2830,7 @@ class HealAction {
 
     await wait
 
-    if (document.querySelector("#divAlerten .alerten.getting.minus")) return this.teleportArea()
+    if (document.querySelector("#divAlerten .alerten.getting.minus")) await this.teleportArea()
 
     await GameUtils.btnWild(true)
   }
@@ -3579,13 +3574,16 @@ class LevelUpAction {
   }
 
   findMonster() {
-    if (!+settings.get("monsterUp")) {
+    const monsterSearch = +settings.get("monsterUp").replace(/[^\d]/g, "")
+    console.log()
+
+    if (!monsterSearch) {
       soundController.play("shine")
       showNotification("Прокачать", "Указанного монстра с собой нет")
       return false
     }
 
-    const numberMonster = this.data.object.findIndex((m) => m.id === +settings.get("monsterUp").replace(/[^\d]/g, ""))
+    const numberMonster = this.data.object.findIndex((m) => m.id === monsterSearch)
 
     if (!numberMonster) {
       soundController.play("shine")
@@ -3652,15 +3650,15 @@ class SwapAction {
       return false
     }
 
-    const btnOpen = document.querySelector('#divDockMenu .divDockIcons .divDockIn img[src*="team"]')
+    const btnOpen = document.querySelector(' .divDockIcons .divDockIn img[src*="team"]')
     btnOpen.click()
 
     btnOpen.classList.remove("active")
-    document.querySelector("#divDockMenu .divDockPanels").style.display = "none"
+    document.querySelector(" .divDockPanels").style.display = "none"
     await this.waitMenuTeam()
     await GameUtils.delayFast()
 
-    const monsters = document.querySelectorAll("#divDockMenu .divDockPanels .panel.panelpokes .divPokeTeam .pokemonBoxCard")
+    const monsters = document.querySelectorAll(" .divDockPanels .panel.panelpokes .divPokeTeam .pokemonBoxCard")
     for (const el of monsters) {
       if (
         el.querySelector(".maincardContainer .toolbar .id").textContent.trim().replace(/[^\d]/g, "") ===
@@ -3678,7 +3676,7 @@ class SwapAction {
   }
 
   async waitMenuTeam() {
-    const menuTeam = document.querySelector("#divDockMenu .divDockPanels .panel.panelpokes .divPokeTeam")
+    const menuTeam = document.querySelector(" .divDockPanels .panel.panelpokes .divPokeTeam")
     return this.observer.observe(
       "waitTeam",
       menuTeam,
@@ -3938,7 +3936,7 @@ class CaptureAction {
   }
   //
   async waitMenuTeam() {
-    const menuTeam = document.querySelector("#divDockMenu .divDockPanels .panel.panelpokes .divPokeTeam")
+    const menuTeam = document.querySelector(" .divDockPanels .panel.panelpokes .divPokeTeam")
     return this.observer.observe(
       "waitTeam",
       menuTeam,
@@ -3951,14 +3949,14 @@ class CaptureAction {
       return true
     }
 
-    const btnOpen = document.querySelector('#divDockMenu .divDockIcons .divDockIn img[src*="team"]')
+    const btnOpen = document.querySelector(' .divDockIcons .divDockIn img[src*="team"]')
     btnOpen.click()
 
     btnOpen.classList.remove("active")
-    document.querySelector("#divDockMenu .divDockPanels").style.display = "none"
+    document.querySelector(" .divDockPanels").style.display = "none"
     await this.waitMenuTeam()
 
-    const monsters = document.querySelectorAll("#divDockMenu .divDockPanels .panel.panelpokes .divPokeTeam .pokemonBoxCard")
+    const monsters = document.querySelectorAll(" .divDockPanels .panel.panelpokes .divPokeTeam .pokemonBoxCard")
     for (const el of monsters) {
       if (
         el.querySelector(".maincardContainer .toolbar .id").textContent.trim().replace(/[^\d]/g, "") ===
@@ -3980,11 +3978,11 @@ class CaptureAction {
   }
 
   async blockTransfer() {
-    const btnOpen = document.querySelector('#divDockMenu .divDockIcons .divDockIn img[src*="team"]')
+    const btnOpen = document.querySelector(' .divDockIcons .divDockIn img[src*="team"]')
     const response = waitForXHR("/do/pokes/load/team")
     btnOpen.click()
 
-    document.querySelector("#divDockMenu .divDockPanels").style.display = "none"
+    document.querySelector(" .divDockPanels").style.display = "none"
     await this.waitMenuTeam()
 
     const data = await response
@@ -3994,14 +3992,14 @@ class CaptureAction {
     btnOpen.click()
   }
   async hasCountCapture() {
-    const btnOpen = document.querySelector('#divDockMenu .divDockIcons .divDockIn img[src*="team"]')
+    const btnOpen = document.querySelector(' .divDockIcons .divDockIn img[src*="team"]')
     btnOpen.click()
 
-    document.querySelector("#divDockMenu .divDockPanels").style.display = "none"
+    document.querySelector(" .divDockPanels").style.display = "none"
 
     await this.waitMenuTeam()
 
-    const monsters = document.querySelectorAll("#divDockMenu .divDockPanels .panel.panelpokes .divPokeTeam .pokemonBoxCard").length
+    const monsters = document.querySelectorAll(" .divDockPanels .panel.panelpokes .divPokeTeam .pokemonBoxCard").length
     const calc = monsters - arrCapture.length
 
     if (calc >= +settings.get("userCountCapture") || monsters === 6) {
@@ -4039,8 +4037,8 @@ class BattleActionStrategy {
     if (settings.get("surrenderTrainer")) {
       if (document.querySelector("#divFightH .pokemonBoxDummy")?.contains("trainer")) return new SurrenderAction().execute()
     }
-
-    if (this.enemy.name === "Питонстр" && redMonster) return new Tester().execute()
+    // ДРОП ЯДА
+    // if (this.enemy.name === "Питонстр" && redMonster) return new Tester().execute()
 
     for (const [key, set] of Object.entries(allMonsters)) {
       let actualKey = key
@@ -4188,133 +4186,108 @@ class BattleBot {
 const bot = new BattleBot()
 ///
 
-class Tester {
-  static STATUS_SELECTORS = {
-    "Семена-пиявки": "-210px 0px",
-  }
-  constructor() {
-    this.attack = null
-    this.firtsMonster = null
-    this.player = new Player()
-    this.manager = new AttackManager(this.player)
+// class Tester {
+//   static STATUS_SELECTORS = {
+//     "Семена-пиявки": "-210px 0px",
+//   }
+//   constructor() {
+//     this.attack = null
+//     this.firtsMonster = null
+//     this.player = new Player()
+//     this.manager = new AttackManager(this.player)
 
-    this.observer = new BattleObserver()
-  }
-  async execute() {
-    if (this.player.hp <= +settings.get("criticalHP")) return BattleState.handleCriticalSituation()
+//     this.observer = new BattleObserver()
+//   }
+//   async execute() {
+//     if (this.player.hp <= +settings.get("criticalHP")) return BattleState.handleCriticalSituation()
 
-    const result = this.manager.findAttack("Семена-пиявки")
+//     const result = this.manager.findAttack("Семена-пиявки")
 
-    this.attack = result.attack
-    if (!this.attack) return BattleState.handleCriticalSituation()
-    this.attack?.click()
+//     this.attack = result.attack
+//     if (!this.attack) return BattleState.handleCriticalSituation()
+//     this.attack?.click()
 
-    await new BattleObserver().waitForBattleOrMonsterChange()
+//     await new BattleObserver().waitForBattleOrMonsterChange()
 
-    this.firtsMonster = this.player.hp
+//     this.firtsMonster = this.player.hp
 
-    if (!(await this.isStatusActive())) return BattleState.handleCriticalSituation()
+//     if (!(await this.isStatusActive())) return BattleState.handleCriticalSituation()
 
-    await GameUtils.delayAttack()
+//     await GameUtils.delayAttack()
 
-    while (true) {
-      let btnOpen = null
-      let monsters = null
-      btnOpen = document.querySelector('#divDockMenu .divDockIcons .divDockIn img[src*="team"]')
-      btnOpen.click()
+//     while (true) {
+//       let btnOpen = null
+//       let monsters = null
+//       btnOpen = document.querySelector(' .divDockIcons .divDockIn img[src*="team"]')
+//       btnOpen.click()
 
-      btnOpen.classList.remove("active")
-      document.querySelector("#divDockMenu .divDockPanels").style.display = "none"
-      await this.waitMenuTeam()
+//       btnOpen.classList.remove("active")
+//       document.querySelector(".divDockPanels").style.display = "none"
 
-      monsters = document.querySelectorAll("#divDockMenu .divDockPanels .panel.panelpokes .divPokeTeam .pokemonBoxCard")
-      for (const el of monsters) {
-        if (el.querySelector(".maincardContainer .toolbar .id").textContent.trim().replace(/[^\d]/g, "") === "17368244") {
-          const btnSet = el.querySelector(".maincardContainer .title .button.justicon")
-          const response = waitForXHR("/do/fight/switche")
-          btnSet?.click()
-          await response
-          break
-        }
-      }
+//       await this.waitMenuTeam()
 
-      if (!BattleState.isBattleActive()) {
-        if (this.firtsMonster <= +settings.get("criticalHP")) return new HealAction().execute()
-        return GameUtils.afterFight(this.attack)
-      }
+//       monsters = document.querySelectorAll(".divDockPanels .panel.panelpokes .divPokeTeam .pokemonBoxCard")
 
-      await GameUtils.delayAttack()
-      btnOpen = document.querySelector('#divDockMenu .divDockIcons .divDockIn img[src*="team"]')
-      btnOpen.click()
+//       for (const el of monsters) {
+//         if (el.querySelector(".maincardContainer .toolbar .id").textContent.trim().replace(/[^\d]/g, "") === "17368244") {
+//           const btnSet = el.querySelector(".maincardContainer .title .button.justicon")
+//           const response = waitForXHR("/do/fight/switche")
+//           btnSet?.click()
+//           await response
+//           break
+//         }
+//       }
 
-      btnOpen.classList.remove("active")
-      document.querySelector("#divDockMenu .divDockPanels").style.display = "none"
-      await this.waitMenuTeam()
+//       if (!BattleState.isBattleActive()) {
+//         if (this.firtsMonster <= +settings.get("criticalHP")) return new HealAction().execute()
+//         return GameUtils.afterFight(this.attack)
+//       }
 
-      monsters = document.querySelectorAll("#divDockMenu .divDockPanels .panel.panelpokes .divPokeTeam .pokemonBoxCard")
-      for (const el of monsters) {
-        if (el.querySelector(".maincardContainer .toolbar .id").textContent.trim().replace(/[^\d]/g, "") === "9824501") {
-          const btnSet = el.querySelector(".maincardContainer .title .button.justicon")
-          const response = waitForXHR("/do/fight/switche")
-          btnSet?.click()
-          await response
-          break
-        }
-      }
-      if (!BattleState.isBattleActive()) {
-        if (this.firtsMonster <= +settings.get("criticalHP")) return new HealAction().execute()
-        return GameUtils.afterFight(this.attack)
-      }
+//       await GameUtils.delayAttack()
+//       btnOpen = document.querySelector(' .divDockIcons .divDockIn img[src*="team"]')
+//       btnOpen.click()
 
-      await GameUtils.delayAttack()
-    }
-  }
-  async waitMenuTeam() {
-    const menuTeam = document.querySelector("#divDockMenu .divDockPanels .panel.panelpokes .divPokeTeam")
-    return this.observer.observe(
-      "waitTeam",
-      menuTeam,
-      { childList: true },
-      (mutation) => mutation.type === "childList" && mutation.addedNodes.length > 0
-    )
-  }
-  async setMonster() {
-    const btnOpen = document.querySelector('#divDockMenu .divDockIcons .divDockIn img[src*="team"]')
-    btnOpen.click()
+//       btnOpen.classList.remove("active")
+//       document.querySelector(" .divDockPanels").style.display = "none"
+//       await this.waitMenuTeam()
 
-    btnOpen.classList.remove("active")
-    document.querySelector("#divDockMenu .divDockPanels").style.display = "none"
-    await this.waitMenuTeam()
+//       monsters = document.querySelectorAll(" .divDockPanels .panel.panelpokes .divPokeTeam .pokemonBoxCard")
+//       for (const el of monsters) {
+//         if (el.querySelector(".maincardContainer .toolbar .id").textContent.trim().replace(/[^\d]/g, "") === "9824501") {
+//           const btnSet = el.querySelector(".maincardContainer .title .button.justicon")
+//           const response = waitForXHR("/do/fight/switche")
+//           btnSet?.click()
+//           await response
+//           break
+//         }
+//       }
+//       if (!BattleState.isBattleActive()) {
+//         if (this.firtsMonster <= +settings.get("criticalHP")) return new HealAction().execute()
+//         return GameUtils.afterFight(this.attack)
+//       }
 
-    const monsters = document.querySelectorAll("#divDockMenu .divDockPanels .panel.panelpokes .divPokeTeam .pokemonBoxCard")
-    for (const el of monsters) {
-      if (
-        el.querySelector(".maincardContainer .toolbar .id").textContent.trim().replace(/[^\d]/g, "") ===
-        settings.get("monsterCapture").replace(/[^\d]/g, "")
-      ) {
-        const btnSet = el.querySelector(".maincardContainer .title .button.justicon")
-        const response = waitForXHR("/do/fight/switche")
-        btnSet?.click()
-        if (!btnSet) return true
-        await response
-        this.tauntCounter++
-        return true
-      }
-    }
+//       await GameUtils.delayAttack()
+//     }
+//   }
+//   async waitMenuTeam() {
+//     const menuTeam = document.querySelector(" .divDockPanels .panel.panelpokes .divPokeTeam")
+//     return this.observer.observe(
+//       "waitTeam",
+//       menuTeam,
+//       { childList: true },
+//       (mutation) => mutation.type === "childList" && mutation.addedNodes.length > 0
+//     )
+//   }
 
-    soundController.play("shine")
-    showNotification("Поймать", "Монстр для поимки отсутствует")
-    return false
-  }
-  async isStatusActive() {
-    const statusAll = document.querySelectorAll("#divFightH .statusimg")
+//   async isStatusActive() {
+//     const statusAll = document.querySelectorAll("#divFightH .statusimg")
 
-    for (const el of statusAll) {
-      if (el.style.backgroundPosition.trim() === Tester.STATUS_SELECTORS["Семена-пиявки"]) return true
-    }
-    return false
-  }
-}
+//     for (const el of statusAll) {
+//       if (el.style.backgroundPosition.trim() === Tester.STATUS_SELECTORS["Семена-пиявки"]) return true
+//     }
+//     return false
+//   }
+// }
 let meName = null
 
 class SoundController {
@@ -4370,6 +4343,7 @@ class MessageManager {
 
   start() {
     this.searchMyName()
+    this.test()
     this.observer = new MutationObserver((mutations) => {
       for (const mutation of mutations) {
         for (const node of mutation.addedNodes) {
