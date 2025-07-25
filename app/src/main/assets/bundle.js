@@ -4038,7 +4038,7 @@ class BattleActionStrategy {
       if (document.querySelector("#divFightH .pokemonBoxDummy")?.contains("trainer")) return new SurrenderAction().execute()
     }
     // ДРОП ЯДА
-    // if (this.enemy.name === "Питонстр" && redMonster) return new Tester().execute()
+    if (this.enemy.name === "Питонстр" && redMonster) return new Tester().execute()
 
     for (const [key, set] of Object.entries(allMonsters)) {
       let actualKey = key
@@ -4186,108 +4186,108 @@ class BattleBot {
 const bot = new BattleBot()
 ///
 
-// class Tester {
-//   static STATUS_SELECTORS = {
-//     "Семена-пиявки": "-210px 0px",
-//   }
-//   constructor() {
-//     this.attack = null
-//     this.firtsMonster = null
-//     this.player = new Player()
-//     this.manager = new AttackManager(this.player)
+class Tester {
+  static STATUS_SELECTORS = {
+    "Семена-пиявки": "-210px 0px",
+  }
+  constructor() {
+    this.attack = null
+    this.firtsMonster = null
+    this.player = new Player()
+    this.manager = new AttackManager(this.player)
 
-//     this.observer = new BattleObserver()
-//   }
-//   async execute() {
-//     if (this.player.hp <= +settings.get("criticalHP")) return BattleState.handleCriticalSituation()
+    this.observer = new BattleObserver()
+  }
+  async execute() {
+    if (this.player.hp <= +settings.get("criticalHP")) return BattleState.handleCriticalSituation()
 
-//     const result = this.manager.findAttack("Семена-пиявки")
+    const result = this.manager.findAttack("Семена-пиявки")
 
-//     this.attack = result.attack
-//     if (!this.attack) return BattleState.handleCriticalSituation()
-//     this.attack?.click()
+    this.attack = result.attack
+    if (!this.attack) return BattleState.handleCriticalSituation()
+    this.attack?.click()
 
-//     await new BattleObserver().waitForBattleOrMonsterChange()
+    await new BattleObserver().waitForBattleOrMonsterChange()
 
-//     this.firtsMonster = this.player.hp
+    this.firtsMonster = this.player.hp
 
-//     if (!(await this.isStatusActive())) return BattleState.handleCriticalSituation()
+    if (!(await this.isStatusActive())) return BattleState.handleCriticalSituation()
 
-//     await GameUtils.delayAttack()
+    await GameUtils.delayAttack()
 
-//     while (true) {
-//       let btnOpen = null
-//       let monsters = null
-//       btnOpen = document.querySelector(' .divDockIcons .divDockIn img[src*="team"]')
-//       btnOpen.click()
+    while (true) {
+      let btnOpen = null
+      let monsters = null
+      btnOpen = document.querySelector(' .divDockIcons .divDockIn img[src*="team"]')
+      btnOpen.click()
 
-//       btnOpen.classList.remove("active")
-//       document.querySelector(".divDockPanels").style.display = "none"
+      btnOpen.classList.remove("active")
+      document.querySelector(".divDockPanels").style.display = "none"
 
-//       await this.waitMenuTeam()
+      await this.waitMenuTeam()
 
-//       monsters = document.querySelectorAll(".divDockPanels .panel.panelpokes .divPokeTeam .pokemonBoxCard")
+      monsters = document.querySelectorAll(".divDockPanels .panel.panelpokes .divPokeTeam .pokemonBoxCard")
 
-//       for (const el of monsters) {
-//         if (el.querySelector(".maincardContainer .toolbar .id").textContent.trim().replace(/[^\d]/g, "") === "17368244") {
-//           const btnSet = el.querySelector(".maincardContainer .title .button.justicon")
-//           const response = waitForXHR("/do/fight/switche")
-//           btnSet?.click()
-//           await response
-//           break
-//         }
-//       }
+      for (const el of monsters) {
+        if (el.querySelector(".maincardContainer .toolbar .id").textContent.trim().replace(/[^\d]/g, "") === "17368244") {
+          const btnSet = el.querySelector(".maincardContainer .title .button.justicon")
+          const response = waitForXHR("/do/fight/switche")
+          btnSet?.click()
+          await response
+          break
+        }
+      }
 
-//       if (!BattleState.isBattleActive()) {
-//         if (this.firtsMonster <= +settings.get("criticalHP")) return new HealAction().execute()
-//         return GameUtils.afterFight(this.attack)
-//       }
+      if (!BattleState.isBattleActive()) {
+        if (this.firtsMonster <= +settings.get("criticalHP")) return new HealAction().execute()
+        return GameUtils.afterFight(this.attack)
+      }
 
-//       await GameUtils.delayAttack()
-//       btnOpen = document.querySelector(' .divDockIcons .divDockIn img[src*="team"]')
-//       btnOpen.click()
+      await GameUtils.delayAttack()
+      btnOpen = document.querySelector(' .divDockIcons .divDockIn img[src*="team"]')
+      btnOpen.click()
 
-//       btnOpen.classList.remove("active")
-//       document.querySelector(" .divDockPanels").style.display = "none"
-//       await this.waitMenuTeam()
+      btnOpen.classList.remove("active")
+      document.querySelector(" .divDockPanels").style.display = "none"
+      await this.waitMenuTeam()
 
-//       monsters = document.querySelectorAll(" .divDockPanels .panel.panelpokes .divPokeTeam .pokemonBoxCard")
-//       for (const el of monsters) {
-//         if (el.querySelector(".maincardContainer .toolbar .id").textContent.trim().replace(/[^\d]/g, "") === "9824501") {
-//           const btnSet = el.querySelector(".maincardContainer .title .button.justicon")
-//           const response = waitForXHR("/do/fight/switche")
-//           btnSet?.click()
-//           await response
-//           break
-//         }
-//       }
-//       if (!BattleState.isBattleActive()) {
-//         if (this.firtsMonster <= +settings.get("criticalHP")) return new HealAction().execute()
-//         return GameUtils.afterFight(this.attack)
-//       }
+      monsters = document.querySelectorAll(" .divDockPanels .panel.panelpokes .divPokeTeam .pokemonBoxCard")
+      for (const el of monsters) {
+        if (el.querySelector(".maincardContainer .toolbar .id").textContent.trim().replace(/[^\d]/g, "") === "9824501") {
+          const btnSet = el.querySelector(".maincardContainer .title .button.justicon")
+          const response = waitForXHR("/do/fight/switche")
+          btnSet?.click()
+          await response
+          break
+        }
+      }
+      if (!BattleState.isBattleActive()) {
+        if (this.firtsMonster <= +settings.get("criticalHP")) return new HealAction().execute()
+        return GameUtils.afterFight(this.attack)
+      }
 
-//       await GameUtils.delayAttack()
-//     }
-//   }
-//   async waitMenuTeam() {
-//     const menuTeam = document.querySelector(" .divDockPanels .panel.panelpokes .divPokeTeam")
-//     return this.observer.observe(
-//       "waitTeam",
-//       menuTeam,
-//       { childList: true },
-//       (mutation) => mutation.type === "childList" && mutation.addedNodes.length > 0
-//     )
-//   }
+      await GameUtils.delayAttack()
+    }
+  }
+  async waitMenuTeam() {
+    const menuTeam = document.querySelector(" .divDockPanels .panel.panelpokes .divPokeTeam")
+    return this.observer.observe(
+      "waitTeam",
+      menuTeam,
+      { childList: true },
+      (mutation) => mutation.type === "childList" && mutation.addedNodes.length > 0
+    )
+  }
 
-//   async isStatusActive() {
-//     const statusAll = document.querySelectorAll("#divFightH .statusimg")
+  async isStatusActive() {
+    const statusAll = document.querySelectorAll("#divFightH .statusimg")
 
-//     for (const el of statusAll) {
-//       if (el.style.backgroundPosition.trim() === Tester.STATUS_SELECTORS["Семена-пиявки"]) return true
-//     }
-//     return false
-//   }
-// }
+    for (const el of statusAll) {
+      if (el.style.backgroundPosition.trim() === Tester.STATUS_SELECTORS["Семена-пиявки"]) return true
+    }
+    return false
+  }
+}
 let meName = null
 
 class SoundController {
