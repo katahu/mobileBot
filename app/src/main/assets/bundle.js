@@ -231,14 +231,14 @@ function waitForXHR(url, timeout = 10000) {
 // cat ./css/fonts.css ./css/style.css > bundle.css
 
 // git add
-// git commit -m "Release version to 1.0.8"
+// git commit -m "Release version to 1.4"
 // git push origin main
 
-// git tag -d v1.0.8
-// git push origin :refs/tags/v1.0.8
+// git tag -d v1.4
+// git push origin :refs/tags/v1.4
 
-// git tag v1.0.7
-// git push origin v1.0.8
+// git tag v1.4
+// git push origin v1.4
 
 // npm run build -- --publish always
 class TimePicker {
@@ -3933,7 +3933,7 @@ class AttackAction {
       this.actualAttack = result.actualAttack
       ;(this.attack || this.actualAttack)?.click()
 
-      if (!this.actualAttack && this.attack) {
+      if (!this.attack && !this.actualAttack) {
         return BattleState.handleCriticalSituation()
       }
 
