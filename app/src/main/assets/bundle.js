@@ -230,20 +230,17 @@ function waitForXHR(url, timeout = 10000) {
 // cat inject.js utils.js timer.js config.js render.js config-ui.js themeController.js heal.js useItem.js dropController.js dev.js antibot.js routerHeal.js autoAd.js > bundle.js
 // cat ./css/fonts.css ./css/style.css > bundle.css
 
-// Обновить на новую версию:
-// git add .
-// git commit -m "Release v1.0.7"
+// git add
+// git commit -m "Release version to 1.0.8"
 // git push origin main
+
+// git tag -d v1.0.8
+// git push origin :refs/tags/v1.0.8
+
 // git tag v1.0.7
-// git push origin v1.0.7
+// git push origin v1.0.8
 
-// Либо:
-
-// npm version patch
-// git push --follow-tags
-
-// npm version patch -m "Release v1.0.8"   // тут он сразу патчит в package.json новую версию.
-// git push --follow-tags // тут он отправляет в гит новую версию
+// npm run build -- --publish always
 class TimePicker {
   constructor() {
     this.ITEM_HEIGHT = 40
@@ -3935,6 +3932,10 @@ class AttackAction {
       this.attack = result.attack
       this.actualAttack = result.actualAttack
       ;(this.attack || this.actualAttack)?.click()
+
+      if (!this.actualAttack && this.attack) {
+        return BattleState.handleCriticalSituation()
+      }
 
       await new BattleObserver().waitForBattleOrMonsterChange()
     }

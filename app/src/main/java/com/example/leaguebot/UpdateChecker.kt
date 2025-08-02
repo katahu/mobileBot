@@ -18,7 +18,7 @@ import java.net.URL
 object UpdateChecker {
 
     private const val GITHUB_API_URL = "https://api.github.com/repos/katahu/mobileBot/releases/latest"
-    private const val CURRENT_VERSION = "1.3"
+    private const val CURRENT_VERSION = "1.4"
 
     fun checkForUpdate(activity: Activity) {
         CoroutineScope(Dispatchers.IO).launch {
